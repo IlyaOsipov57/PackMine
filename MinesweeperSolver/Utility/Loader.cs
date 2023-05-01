@@ -10,7 +10,7 @@ namespace PackMine.Utility
 {
     class Loader
     {
-        public static Room LoadRoom (ZPoint z)
+        public static Room LoadRoom (IntPoint z)
         {
             var data = roomdata[z.x][z.y];
             return ParseRoom(data);
@@ -33,12 +33,12 @@ namespace PackMine.Utility
         private static byte[][][] _roomdata = null;
         private static Room ParseRoom(byte[] data)
         {
-            var map = new ZMap(5, 5, (i, j) => (int)data[i * 5 + j], CellValue.Wall);
+            var map = new IntMap(5, 5, (i, j) => (int)data[i * 5 + j], CellValue.Wall);
             var solutionsCount = data.Length / 25 -1;
-            var solutions = new ZMap[solutionsCount];
+            var solutions = new IntMap[solutionsCount];
             for (int k = 0; k < solutionsCount; k++)
             {
-                solutions[k] = new ZMap(5, 5, (i, j) => (int)data[(k+1)*25 + i * 5 + j], 0);
+                solutions[k] = new IntMap(5, 5, (i, j) => (int)data[(k+1)*25 + i * 5 + j], 0);
             }
             return new Room(map, solutions);
         }
@@ -93,8 +93,8 @@ namespace PackMine.Utility
             {
                 for(int j=0;j<4;j++)
                 {
-                    var z = new ZPoint(i,j);
-                    dataList.Add((byte)(gameState.solvedRooms.Contains(z) ? 1 : 0));
+                    var p = new IntPoint(i,j);
+                    dataList.Add((byte)(gameState.solvedRooms.Contains(p) ? 1 : 0));
                 }
             }
             dataList.Add((byte)(gameState.playerSavedPosition.x + PlayerCoordinatesOffset));
@@ -119,26 +119,26 @@ namespace PackMine.Utility
             gameState.version = (int)data[0];
             gameState.roomsPrepared = gameState.version == GameState.CurrentVersion;
 
-            gameState.map = new ZMap(23, 23, (i, j) => ((int)data[i * 23 + j + 1]) - 2, CellValue.Wall);
+            gameState.map = new IntMap(23, 23, (i, j) => ((int)data[i * 23 + j + 1]) - 2, CellValue.Wall);
 
             var offset = 23*23 + 1;
-            gameState.solvedRooms = new HashSet<ZPoint>();
+            gameState.solvedRooms = new HashSet<IntPoint>();
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
                     if(data[offset + i*4 + j] != (byte)0)
                     {
-                        var z = new ZPoint(i, j);
-                        gameState.solvedRooms.Add(z);
+                        var p = new IntPoint(i, j);
+                        gameState.solvedRooms.Add(p);
                     }
                 }
             }
 
             offset += 4 * 4;
-            gameState.playerSavedPosition = new ZPoint(data[offset] - PlayerCoordinatesOffset, data[offset + 1] - PlayerCoordinatesOffset);
+            gameState.playerSavedPosition = new IntPoint(data[offset] - PlayerCoordinatesOffset, data[offset + 1] - PlayerCoordinatesOffset);
             gameState.playerSavedDirection = data[offset + 2];
-            gameState.playerLastStablePosition = new ZPoint(data[offset + 3] - PlayerCoordinatesOffset, data[offset + 4] - PlayerCoordinatesOffset);
+            gameState.playerLastStablePosition = new IntPoint(data[offset + 3] - PlayerCoordinatesOffset, data[offset + 4] - PlayerCoordinatesOffset);
             gameState.playerDirection = data[offset + 5];
             gameState.CornerstoneVisited = data[offset + 6] != (byte)0;
             gameState.challengeState.challengeDoneOOB = data[offset + 7] != (byte)0;
@@ -149,18 +149,18 @@ namespace PackMine.Utility
             return gameState;
         }
 
-#if DEBUG
+#if EDITOR
         public static Room LoadRoomFromFile(String fileName)
         {
             var data = File.ReadAllBytes(fileName);
             return ParseRoom(data);
         }
-        public static void SaveToFile(ZMap map, ZMap[]solutions, String fileName)
+        public static void SaveToFile(IntMap map, IntMap[]solutions, String fileName)
         {
             var data = GetData(map,solutions);
             File.WriteAllBytes(fileName, data);
         }
-        private static byte[] GetData(ZMap map, ZMap[] solutions)
+        private static byte[] GetData(IntMap map, IntMap[] solutions)
         {
             var dataList = new List<byte>();
 

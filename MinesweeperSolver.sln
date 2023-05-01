@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinesweeperSolver", "MinesweeperSolver\MinesweeperSolver.csproj", "{2E956831-46BD-419A-816D-58A2C3645963}"
 EndProject
@@ -9,6 +9,8 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
+		Editor|Any CPU = Editor|Any CPU
+		Editor|x86 = Editor|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -17,6 +19,10 @@ Global
 		{2E956831-46BD-419A-816D-58A2C3645963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E956831-46BD-419A-816D-58A2C3645963}.Debug|x86.ActiveCfg = Debug|x86
 		{2E956831-46BD-419A-816D-58A2C3645963}.Debug|x86.Build.0 = Debug|x86
+		{2E956831-46BD-419A-816D-58A2C3645963}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{2E956831-46BD-419A-816D-58A2C3645963}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{2E956831-46BD-419A-816D-58A2C3645963}.Editor|x86.ActiveCfg = Editor|x86
+		{2E956831-46BD-419A-816D-58A2C3645963}.Editor|x86.Build.0 = Editor|x86
 		{2E956831-46BD-419A-816D-58A2C3645963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E956831-46BD-419A-816D-58A2C3645963}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E956831-46BD-419A-816D-58A2C3645963}.Release|x86.ActiveCfg = Release|x86

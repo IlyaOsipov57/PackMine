@@ -9,31 +9,31 @@ namespace PackMine.Puzzle
 {
     class Room
     {
-        public Room (ZMap map, ZMap[] solutions)
+        public Room (IntMap map, IntMap[] solutions)
         {
             this.source = map;
             this.solutions = solutions;
         }
-        ZMap source = new ZMap(5, 5, (a, b) =>  CellValue.Open, CellValue.Wall);
-        ZMap[] solutions = new ZMap[0];
+        IntMap source = new IntMap(5, 5, (a, b) =>  CellValue.Open, CellValue.Wall);
+        IntMap[] solutions = new IntMap[0];
         public enum RoomState { Unsolvable, Solvable, Solved };
-        public static ZPoint FixRoomIndex(ZPoint room)
+        public static IntPoint FixRoomIndex(IntPoint room)
         {
-            return new ZPoint(
+            return new IntPoint(
                 Math.Min(3, Math.Max(0, room.x)),
                 Math.Min(3, Math.Max(0, room.y)));
         }
-        public static String GetName(ZPoint room)
+        public static String GetName(IntPoint room)
         {
             return Names[room.y][room.x];
         }
-        public bool Clear(ZMap map, ZPoint position)
+        public bool Clear(IntMap map, IntPoint position)
         {
             if(last == position)
             {
                 return false;
             }
-            last = new ZPoint(position);
+            last = new IntPoint(position);
             var p = position / 6;
             {
                 var v = metaMap.Get(p);
@@ -49,7 +49,7 @@ namespace PackMine.Puzzle
                 {
                     for (int j = 0; j < 5; j++)
                     {
-                        var z1 = new ZPoint(i, j);
+                        var z1 = new IntPoint(i, j);
                         var z2 = position + z1;
                         map.Set(z2, pattern[j][i]);
                     }
@@ -60,8 +60,7 @@ namespace PackMine.Puzzle
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    var z = new ZPoint(i, j);
-                    var v = metaMap.Get(z);
+                    var v = metaMap.Get(i, j);
                     if (v == -1)
                     {
                         return false;
@@ -92,9 +91,9 @@ namespace PackMine.Puzzle
             new String[] {"Winding path","Deja vu","Wall","Red carpet"},
             new String[] {"Eat the bullet","Crossing","Separated","Free bird"},
             new String[] {"Cornerstone","Left or right?","Possibilities","Dead end"}};
-        private static ZPoint last;
+        private static IntPoint last;
         private static int[][] metaPattern = new int[][] {new int[]{1,2,2,1},new int[]{2,2,3,1},new int[]{1,3,4,2},new int[]{2,2,1,2}};
-        private static ZMap metaMap = new ZMap(4, 4, (i, j) => -1, -1);
+        private static IntMap metaMap = new IntMap(4, 4, (i, j) => -1, -1);
         private static int[][] mine = new int[][] { new int[] { 10, 9, 10, 9, 10 }, new int[] { 9, 10, 10, 10, 9 }, new int[] { 10, 10, 10, 10, 10 }, new int[] { 9, 10, 10, 10, 9 }, new int[] { 10, 9, 10, 9, 10 } };
         private static int[][] one = new int[][] { new int[] { 9, 9, 1, 9, 9 }, new int[] { 9, 1, 1, 9, 9 }, new int[] { 9, 9, 1, 9, 9 }, new int[] { 9, 9, 1, 9, 9 }, new int[] { 9, 1, 1, 1, 9 } };
         private static int[][] two = new int[][] { new int[] { 9, 2, 2, 9, 9 }, new int[] { 9, 9, 9, 2, 9 }, new int[] { 9, 9, 9, 2, 9 }, new int[] { 9, 9, 2, 9, 9 }, new int[] { 9, 2, 2, 2, 9 } };
@@ -106,13 +105,13 @@ namespace PackMine.Puzzle
         //private static int[][] eight = new int[][] { new int[] { 9, 8, 8, 8, 9 }, new int[] { 9, 8, 9, 8, 9 }, new int[] { 9, 8, 8, 8, 9 }, new int[] { 9, 8, 9, 8, 9 }, new int[] { 9, 8, 8, 8, 9 } };
         //private static int[][] free = new int[][] { new int[] { 9, 9, 9, 9, 9 }, new int[] { 9, 9, 9, 9, 9 }, new int[] { 9, 9, 9, 9, 9 }, new int[] { 9, 9, 9, 9, 9 }, new int[] { 9, 9, 9, 9, 9 } };
         private static int[][][] array = new int[][][] { mine, one, two, three, four};//, five, six, seven, eight, free };
-        public bool Verify(ZMap map, ZPoint position)
+        public bool Verify(IntMap map, IntPoint position)
         {
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    var z1 = new ZPoint(i, j);
+                    var z1 = new IntPoint(i, j);
                     var z2 = position + z1;
                     var mv = map.Get(z2);
                     var sv = source.Get(z1);
@@ -122,26 +121,26 @@ namespace PackMine.Puzzle
             }
             return true;
         }
-        public void Repair(ZMap map, ZPoint position)
+        public void Repair(IntMap map, IntPoint position)
         {
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    var z1 = new ZPoint(i, j);
+                    var z1 = new IntPoint(i, j);
                     var z2 = position + z1;
                     map.Set(z2, source.Get(z1));
                 }
             }
             UpdateFlags(map, position);
         }
-        public void UpdateFlags (ZMap map, ZPoint position)
+        public void UpdateFlags (IntMap map, IntPoint position)
         {
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    var z1 = new ZPoint(i, j);
+                    var z1 = new IntPoint(i, j);
                     var z2 = position + z1;
                     
                     if(map.Get(z2) != CellValue.Open && map.Get(z2) != CellValue.Flag)
@@ -159,9 +158,9 @@ namespace PackMine.Puzzle
                 }
             }
         }
-        public RoomState GetRoomState (ZMap map, ZPoint position)
+        public RoomState GetRoomState (IntMap map, IntPoint position)
         {
-            ZMap match = null;
+            IntMap match = null;
             int solutionNumber = 0;
             foreach(var solution in solutions)
             {
@@ -179,13 +178,13 @@ namespace PackMine.Puzzle
                 return RoomState.Solved;
             return RoomState.Solvable;
         }
-        private bool FitSolution (ZMap map, ZPoint position, ZMap solution)
+        private bool FitSolution (IntMap map, IntPoint position, IntMap solution)
         {
             for (int i = 0; i < 5;i++ )
             {
                 for(int j = 0;j<5;j++)
                 {
-                    var z1 = new ZPoint(i,j);
+                    var z1 = new IntPoint(i,j);
                     var z2 = position + z1;
                     if (solution.Get(z1) == 1 && !(map.Get(z2) == CellValue.Open || map.Get(z2) == CellValue.Flag))
                         return false;
@@ -193,13 +192,13 @@ namespace PackMine.Puzzle
             }
             return true;
         }
-        private bool MatchSolution(ZMap map, ZPoint position, ZMap solution)
+        private bool MatchSolution(IntMap map, IntPoint position, IntMap solution)
         {
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    var z1 = new ZPoint(i, j);
+                    var z1 = new IntPoint(i, j);
                     var z2 = position + z1;
                     if (solution.Get(z1) != 1 && (map.Get(z2) == CellValue.Open || map.Get(z2) == CellValue.Flag))
                         return false;
@@ -207,7 +206,7 @@ namespace PackMine.Puzzle
             }
             return true;
         }
-#if DEBUG
+#if EDITOR
         public void Solve()
         {
             RoomSolver rs = new RoomSolver(this.source.width);

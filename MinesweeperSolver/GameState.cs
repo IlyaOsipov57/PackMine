@@ -22,13 +22,13 @@ namespace PackMine
         public static int CurrentVersion = 1;
         public int version;
 
-        public ZMap map = new ZMap(23, 23, ZMap.Roomy, CellValue.Wall);
+        public IntMap map = new IntMap(23, 23, IntMap.Roomy, CellValue.Wall);
 
-        public ZPoint playerSavedPosition;
+        public IntPoint playerSavedPosition;
         public int playerSavedDirection;
-        public ZPoint playerLastStablePosition;
+        public IntPoint playerLastStablePosition;
         public int playerDirection;
-        public HashSet<ZPoint> solvedRooms;
+        public HashSet<IntPoint> solvedRooms;
         public bool roomsPrepared;
         public bool CornerstoneVisited;
         public ChallengeState challengeState;
@@ -36,12 +36,12 @@ namespace PackMine
         private void Init()
         {
             version = CurrentVersion;
-            map = new ZMap(23, 23, ZMap.Roomy, CellValue.Wall);
-            solvedRooms = new HashSet<ZPoint>();
+            map = new IntMap(23, 23, IntMap.Roomy, CellValue.Wall);
+            solvedRooms = new HashSet<IntPoint>();
             roomsPrepared = false;
-            playerSavedPosition = new ZPoint(GameForm.startPosition);
+            playerSavedPosition = new IntPoint(GameForm.startPosition);
             playerSavedDirection = 0;
-            playerLastStablePosition = new ZPoint(GameForm.startPosition);
+            playerLastStablePosition = new IntPoint(GameForm.startPosition);
             playerDirection = 0;
             CornerstoneVisited = false;
         }

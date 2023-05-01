@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PackMine.Puzzle
 {
-#if DEBUG
+#if EDITOR
     class RoomSolver
     {
         public RoomSolver(int n)
@@ -14,13 +14,13 @@ namespace PackMine.Puzzle
             this.n = n;
         }
         int n = 5;
-        ZMap map;
+        IntMap map;
 
         int[][] matrix;
         int[][] matrixMap;
         int variableCount;
 
-        public ZMap[] Solve(ZMap map)
+        public IntMap[] Solve(IntMap map)
         {
             this.map = map;
 
@@ -96,7 +96,7 @@ namespace PackMine.Puzzle
                 }
             }
         }
-        private ZMap[] SolveMatrix ()
+        private IntMap[] SolveMatrix ()
         {
             var solutions = new List<int[]>();
             var K = variableCount;
@@ -110,11 +110,11 @@ namespace PackMine.Puzzle
                 }
             }
 
-            var result = new ZMap[solutions.Count];
+            var result = new IntMap[solutions.Count];
             for(int k = 0; k<solutions.Count;k++)
             {
                 var s = solutions[k];
-                result[k] = new ZMap(n,n,(i,j) => f(s,i,j),0);
+                result[k] = new IntMap(n,n,(i,j) => f(s,i,j),0);
             }
 
             return result;

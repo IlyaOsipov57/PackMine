@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PackMine.Geometry
 {
-    public class ZMap
+    public class IntMap
     {
         int[][] data;
         public int width
@@ -15,7 +15,7 @@ namespace PackMine.Geometry
         }
         int height;
         int defaultValue;
-        public ZMap(int width, int height, Func<int, int, int> generator, int defaultValue)
+        public IntMap(int width, int height, Func<int, int, int> generator, int defaultValue)
         {
             this.width = width;
             this.height = height;
@@ -38,13 +38,13 @@ namespace PackMine.Geometry
                 return CellValue.Open;
             return CellValue.Wall;
         }
-        public int Get(ZPoint z)
+        public int Get(IntPoint p)
         {
-            return Get(z.x, z.y);
+            return Get(p.x, p.y);
         }
-        public int MagicGet(ZPoint z)
+        public int MagicGet(IntPoint p)
         {
-            return MagicGet(z.x, z.y);
+            return MagicGet(p.x, p.y);
         }
         public int MagicGet(int x, int y)
         {
@@ -65,9 +65,9 @@ namespace PackMine.Geometry
             }
             return defaultValue;
         }
-        public void Set(ZPoint z, int value)
+        public void Set(IntPoint p, int value)
         {
-            Set(z.x, z.y, value);
+            Set(p.x, p.y, value);
         }
         public void Set(int x, int y, int value)
         {

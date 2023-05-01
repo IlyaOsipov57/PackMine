@@ -13,9 +13,9 @@ namespace PackMine
 {
     public partial class GameForm : Form
     {
-        internal static ZPoint startPosition = new ZPoint(2, 2);
+        internal static IntPoint startPosition = new IntPoint(2, 2);
         internal static RPoint centerShift = new RPoint(0.5, 0.5);
-        private static ZPoint endPosition = new ZPoint(20, 2);
+        private static IntPoint endPosition = new IntPoint(20, 2);
         internal static double roomFadingSpeed = 2;
         internal static double speed = 2;
         internal static double growthSpeed = 5;
@@ -26,9 +26,9 @@ namespace PackMine
         #endregion
 
         #region Reinitable
-        Dictionary<ZPoint, Room> rooms;
+        Dictionary<IntPoint, Room> rooms;
         bool acting;
-        ZPoint playerMovement;
+        IntPoint playerMovement;
         bool canPrevent;
         bool dead;
         double roomFailed;
@@ -50,13 +50,13 @@ namespace PackMine
         bool mouseMenuClick;
 
         RPoint playerPosition;
-        ZPoint playerTarget;
-        ZPoint currentRoom;
+        IntPoint playerTarget;
+        IntPoint currentRoom;
         private void InitUpdate ()
         {
-            rooms = new Dictionary<ZPoint, Room>();
+            rooms = new Dictionary<IntPoint, Room>();
             acting = false;
-            playerMovement = ZPoint.Zero;
+            playerMovement = IntPoint.Zero;
             canPrevent = true;
             dead = false;
             roomFailed = 0;
@@ -77,7 +77,7 @@ namespace PackMine
             mouseMenuClick = false;
 
             playerPosition = (RPoint)gameState.playerLastStablePosition + centerShift;
-            playerTarget = new ZPoint(gameState.playerLastStablePosition);
+            playerTarget = new IntPoint(gameState.playerLastStablePosition);
             currentRoom = (gameState.playerLastStablePosition + directions[gameState.playerDirection]) / 6;
             currentRoom = Room.FixRoomIndex(currentRoom);
         }
@@ -86,7 +86,7 @@ namespace PackMine
 
         private void GameUpdate()
         {
-            Update_Debug();
+            Update_Editor();
             var _key = axis.Read();
 
             var escapePressed = escape.Read(deltaTime);
@@ -114,11 +114,11 @@ namespace PackMine
                             break;
                         case 1:
                             var c = cameraPosition;
-                            var z = zoom;
+                            var p = zoom;
                             Init(false);
                             SavePlayerImmediately();
                             cameraPosition = c;
-                            zoom = z;
+                            zoom = p;
                             break;
                         case 2:
                             flagsOn = !flagsOn;
@@ -201,13 +201,13 @@ namespace PackMine
                 if(roomFailed > 1 && !roomRepaired)
                 {
                     RepairRoom(currentRoom);
-                    playerTarget = new ZPoint(gameState.playerSavedPosition);
+                    playerTarget = new IntPoint(gameState.playerSavedPosition);
                     playerPosition = (RPoint)(gameState.playerSavedPosition) + centerShift;
                     gameState.playerLastStablePosition = gameState.playerSavedPosition;
                     gameState.playerDirection = gameState.playerSavedDirection;
-                    if ((playerTarget == new ZPoint(14, 11) && gameState.map.Get(14, 5) == CellValue.Door && gameState.map.Get(11, 14) == CellValue.Door) ||
-                        (playerTarget == new ZPoint(14, 5) && gameState.map.Get(14, 11) == CellValue.Door && gameState.map.Get(11, 2) == CellValue.Door) ||
-                        ((playerTarget == new ZPoint(14, 11) || playerTarget == new ZPoint(14, 5)) && gameState.map.Get(11, 2) == CellValue.Door && gameState.map.Get(11, 14) == CellValue.Door))
+                    if ((playerTarget == new IntPoint(14, 11) && gameState.map.Get(14, 5) == CellValue.Door && gameState.map.Get(11, 14) == CellValue.Door) ||
+                        (playerTarget == new IntPoint(14, 5) && gameState.map.Get(14, 11) == CellValue.Door && gameState.map.Get(11, 2) == CellValue.Door) ||
+                        ((playerTarget == new IntPoint(14, 11) || playerTarget == new IntPoint(14, 5)) && gameState.map.Get(11, 2) == CellValue.Door && gameState.map.Get(11, 14) == CellValue.Door))
                     {
                         if(!gameState.challengeState.challengeDoneLost)
                         {
@@ -240,7 +240,7 @@ namespace PackMine
                 if (_key.HasValue)
                 {
                     var key = _key.Value;
-                    if (!acting || (canPrevent && (playerMovement + keysInUse[key] == ZPoint.Zero || playerMovement + keysInUse[key] * 6 == ZPoint.Zero)))
+                    if (!acting || (canPrevent && (playerMovement + keysInUse[key] == IntPoint.Zero || playerMovement + keysInUse[key] * 6 == IntPoint.Zero)))
                     {
                         playerMovement = keysInUse[key];
                         gameState.playerDirection = directions.IndexOf(playerMovement);
@@ -259,7 +259,7 @@ namespace PackMine
                         }
                         else if (IsOOB())
                         {
-                            if (v == CellValue.Wall || (playerTarget.x == -1 && playerTarget.y == 16) || debug)
+                            if (v == CellValue.Wall || (playerTarget.x == -1 && playerTarget.y == 16) || isEditor)
                             {
                                 if (t.x >= -1 &&
                                     t.x <= 23 &&
@@ -274,7 +274,7 @@ namespace PackMine
                         }
                         else
                         {
-                            if (CellValue.IsWalkable(v) || debug)
+                            if (CellValue.IsWalkable(v) || isEditor)
                             {
 
                                 playerTarget += playerMovement;
@@ -316,7 +316,7 @@ namespace PackMine
         }
         internal bool EatCell ()
         {
-            if(debug) return true;
+            if(isEditor) return true;
 
             if (playerTarget.x % 6 == 5 || playerTarget.y % 6 == 5)
             {
@@ -359,7 +359,7 @@ namespace PackMine
                 py /= 6;
             }
 
-            var p = new ZPoint(px, py);
+            var p = new IntPoint(px, py);
             p = Room.FixRoomIndex(p);
 
             if (currentRoom != p)
@@ -407,15 +407,15 @@ namespace PackMine
                     }
                 }
             }
-            if(playerTarget == new ZPoint(4,20))
+            if(playerTarget == new IntPoint(4,20))
             {
                 gameState.CornerstoneVisited = true;
             }
-            if(playerTarget == new ZPoint(2,18))
+            if(playerTarget == new IntPoint(2,18))
             {
                 gameState.CornerstoneVisited = true;
             }
-            if (playerTarget == new ZPoint(20, 5))
+            if (playerTarget == new IntPoint(20, 5))
             {
                 if(!gameState.CornerstoneVisited)
                 {
@@ -442,16 +442,16 @@ namespace PackMine
         {
             Loader.TrySave(gameState);
         }
-        private void SavePlayer(ZPoint savePoint)
+        private void SavePlayer(IntPoint savePoint)
         {
             SetRespawnPosition(savePoint);
             SavePlayerImmediately();
         }
 
-        private void SetRespawnPosition(ZPoint savePoint)
+        private void SetRespawnPosition(IntPoint savePoint)
         {
-            gameState.playerSavedPosition = new ZPoint(savePoint);
-            gameState.playerLastStablePosition = new ZPoint(savePoint);
+            gameState.playerSavedPosition = new IntPoint(savePoint);
+            gameState.playerLastStablePosition = new IntPoint(savePoint);
             gameState.playerSavedDirection = gameState.playerDirection;
         }
         internal void FailRoom ()
@@ -460,18 +460,18 @@ namespace PackMine
             dead = true;
             shakeFactor = 1;
         }
-        internal void CompleteRoom (ZPoint room)
+        internal void CompleteRoom (IntPoint room)
         {
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 5; j++)
                 {
-                    var z = room * 6 + new ZPoint(i, j);
-                    if (gameState.map.Get(z) == CellValue.Open || gameState.map.Get(z) == CellValue.Flag)
-                        gameState.map.Set(z, CellValue.Mine);
+                    var p = room * 6 + new IntPoint(i, j);
+                    if (gameState.map.Get(p) == CellValue.Open || gameState.map.Get(p) == CellValue.Flag)
+                        gameState.map.Set(p, CellValue.Mine);
                 }
             gameState.solvedRooms.Add(room);
             UpdateLocks(room);
-            if (room == new ZPoint(3, 0))
+            if (room == new IntPoint(3, 0))
             {
                 if (gameState.solvedRooms.Count == 16)
                 {
@@ -495,7 +495,7 @@ namespace PackMine
                 SavePlayerImmediately();
             }
         }
-        internal void RepairRoom (ZPoint room)
+        internal void RepairRoom (IntPoint room)
         {
             if (!rooms.ContainsKey(room))
                 return;
@@ -506,11 +506,11 @@ namespace PackMine
             gameState.solvedRooms.Remove(room);
             UpdateLocks(room);
         }
-        internal void UpdateLocks(ZPoint room)
+        internal void UpdateLocks(IntPoint room)
         {
             var roomIsSolved = gameState.solvedRooms.Contains(room);
-            var roomCenter = room * 6 + new ZPoint(2, 2);
-            foreach( var dir in new ZPoint[] {new ZPoint(0,1),new ZPoint(0,-1),new ZPoint(1,0),new ZPoint(-1,0)})
+            var roomCenter = room * 6 + new IntPoint(2, 2);
+            foreach( var dir in new IntPoint[] {new IntPoint(0,1),new IntPoint(0,-1),new IntPoint(1,0),new IntPoint(-1,0)})
             {
                 var doorPosition = roomCenter + dir * 3;
                 if (gameState.map.Get(doorPosition) != CellValue.Wall)
@@ -528,40 +528,43 @@ namespace PackMine
         }
         private void InitRooms()
         {
-            InitRooms_Debug();
-            if (debug) return;
+            if (isEditor)
+            {
+                InitRooms_Editor();
+                return;
+            }
 
             for(int i =0;i<4;i++)
             {
                 for(int j =0;j<4;j++)
                 {
-                    var z = new ZPoint(i, j);
-                    var room = Loader.LoadRoom(z);
+                    var p = new IntPoint(i, j);
+                    var room = Loader.LoadRoom(p);
 
-                    rooms.Add(z, room);
+                    rooms.Add(p, room);
 
                     if (!gameState.roomsPrepared)
                     {
-                        if (!room.Verify(gameState.map, z * 6))
-                            RepairRoom(z);
+                        if (!room.Verify(gameState.map, p * 6))
+                            RepairRoom(p);
                         else
                         {
-                            room.UpdateFlags(gameState.map, z * 6);
+                            room.UpdateFlags(gameState.map, p * 6);
                         }
                     }
                 }
             }
             gameState.roomsPrepared = true;
         }
-        internal void InitRooms_Debug()
+        internal void InitRooms_Editor()
         {
-#if DEBUG
+#if EDITOR
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    var z = new ZPoint(i, j);
-                    var room = Loader.LoadRoom(z);
+                    var p = new IntPoint(i, j);
+                    var room = Loader.LoadRoom(p);
 
                     var filename = "room" + i + "" + j;
                     if (File.Exists(filename))
@@ -569,19 +572,19 @@ namespace PackMine
                         room = Loader.LoadRoomFromFile(filename);
                     }
 
-                    rooms.Add(z, room);
+                    rooms.Add(p, room);
 
-                    RepairRoom(z);
+                    RepairRoom(p);
                 }
             }
             gameState.roomsPrepared = true;
 #endif
         }
-        internal void Update_Debug ()
+        internal void Update_Editor ()
         {
-#if DEBUG
+#if EDITOR
             speed = 5;
-            var p = new ZPoint((int)playerPosition.x, (int)playerPosition.y);
+            var p = new IntPoint((int)playerPosition.x, (int)playerPosition.y);
             if (p.x % 6 != 5 && p.y % 6 != 5)
             {
                 currentRoom = p / 6;
@@ -618,8 +621,8 @@ namespace PackMine
                         for (int i = 0; i < 4; i++)
                             for (int j = 0; j < 4; j++)
                             {
-                                var m = new ZMap(5, 5, (ii, jj) => gameState.map.Get(i * 6 + ii, j * 6 + jj), CellValue.Wall);
-                                var r = new Room(m, new ZMap[0]);
+                                var m = new IntMap(5, 5, (ii, jj) => gameState.map.Get(i * 6 + ii, j * 6 + jj), CellValue.Wall);
+                                var r = new Room(m, new IntMap[0]);
                                 r.Solve();
                                 r.Save("room" + i + "" + j);
                             }
@@ -629,8 +632,8 @@ namespace PackMine
                             int i = currentRoom.x;
                             int j = currentRoom.y;
                             {
-                                var m = new ZMap(5, 5, (ii, jj) => gameState.map.Get(i * 6 + ii, j * 6 + jj), CellValue.Wall);
-                                var r = new Room(m, new ZMap[0]);
+                                var m = new IntMap(5, 5, (ii, jj) => gameState.map.Get(i * 6 + ii, j * 6 + jj), CellValue.Wall);
+                                var r = new Room(m, new IntMap[0]);
                                 r.Solve();
                                 r.Print();
                             }

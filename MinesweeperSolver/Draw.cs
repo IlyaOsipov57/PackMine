@@ -100,9 +100,9 @@ namespace PackMine
             for (int i = 0; i < 23;i++ )
                 for (int j = 0; j < 23; j++)
                 {
-                    var z = new ZPoint(i, j);
-                    if (gameState.map.Get(z) != CellValue.Wall && z != endPosition)
-                        DrawSquare(g,z);
+                    var p = new IntPoint(i, j);
+                    if (gameState.map.Get(p) != CellValue.Wall && p != endPosition)
+                        DrawSquare(g,p);
                 }
 
             ////
@@ -110,9 +110,9 @@ namespace PackMine
             //for (int i = -1; i < 24; i++)
             //    for (int j = -1; j < 24; j++)
             //    {
-            //        var z = new ZPoint(i, j);
-            //        if (gameState.map.Get(z) == CellValue.Wall)
-            //            DrawSquare(g, z);
+            //        var p = new ZPoint(i, j);
+            //        if (gameState.map.Get(p) == CellValue.Wall)
+            //            DrawSquare(g, p);
             //    }
             //g.SmoothingMode = SmoothingMode.AntiAlias;
             ////
@@ -255,7 +255,7 @@ namespace PackMine
         {
             public String Title;
             public String Description;
-            public ZPoint Room;
+            public IntPoint Room;
             public bool Done;
         }
         private void DrawRoomSecretTitle(Graphics g)
@@ -264,25 +264,25 @@ namespace PackMine
                 new Challenge(){
                     Title = "Outside of the box",
                     Description = "Get out of bounds",
-                    Room = new ZPoint(0,0),
+                    Room = new IntPoint(0,0),
                     Done = gameState.challengeState.challengeDoneOOB
                 },
                 new Challenge(){
                     Title = "Well done",
                     Description = "Solve it all\r\nand eat the cherry",
-                    Room = new ZPoint(3,0),
+                    Room = new IntPoint(3,0),
                     Done = gameState.challengeState.challengeDoneComplete
                 },
                 new Challenge(){
                     Title = "Lockdown",
                     Description = "Isolate yourself\r\nfrom the cherry",
-                    Room = new ZPoint(3,3),
+                    Room = new IntPoint(3,3),
                     Done = gameState.challengeState.challengeDoneLost
                 },
                 new Challenge(){
                     Title = "Overcomplication",
                     Description = "Do not enter\r\nthis room",
-                    Room = new ZPoint(0,3),
+                    Room = new IntPoint(0,3),
                     Done = gameState.challengeState.challengeDoneExpert
                 },
             };
@@ -367,7 +367,7 @@ namespace PackMine
             }
         }
 
-        internal void DrawFog(Graphics g, ZPoint room, Color baseColor, double thickness)
+        internal void DrawFog(Graphics g, IntPoint room, Color baseColor, double thickness)
         {
             var color = Color.FromArgb((int)(255*thickness),baseColor);
             using (var b = new SolidBrush(color))
@@ -530,7 +530,7 @@ namespace PackMine
                 }
             }
         }
-        internal void DrawSquare (Graphics g, ZPoint coordinates)
+        internal void DrawSquare (Graphics g, IntPoint coordinates)
         {
             var value = gameState.map.Get(coordinates);
 

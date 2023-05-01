@@ -100,7 +100,7 @@ namespace PackMine.Geometry
         {
             return new RPoint(A.X, A.Y);
         }
-        public static explicit operator RPoint(ZPoint A)
+        public static explicit operator RPoint(IntPoint A)
         {
             return new RPoint(A.x, A.y);
         }

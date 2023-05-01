@@ -21,21 +21,21 @@ namespace PackMine
         Random R = new Random();
         internal delegate void UpdateEvent();
         internal delegate void UpdateImageEvent(Image image);
-        internal static Dictionary<Keys, ZPoint> keysInUse = new Dictionary<Keys, ZPoint>(){
-            {Keys.Right, new ZPoint(1,0)},
-            {Keys.Down, new ZPoint(0,1)},
-            {Keys.Left, new ZPoint(-1,0)},
-            {Keys.Up, new ZPoint(0,-1)},
-            {Keys.D, new ZPoint(1,0)},
-            {Keys.S, new ZPoint(0,1)},
-            {Keys.A, new ZPoint(-1,0)},
-            {Keys.W, new ZPoint(0,-1)}};
-        internal static List<ZPoint> directions = new List<ZPoint>() {
-            new ZPoint(1,0),
-            new ZPoint(0,1),
-            new ZPoint(-1,0),
-            new ZPoint(0,-1)};
-        static bool debug = false;
+        internal static Dictionary<Keys, IntPoint> keysInUse = new Dictionary<Keys, IntPoint>(){
+            {Keys.Right, new IntPoint(1,0)},
+            {Keys.Down, new IntPoint(0,1)},
+            {Keys.Left, new IntPoint(-1,0)},
+            {Keys.Up, new IntPoint(0,-1)},
+            {Keys.D, new IntPoint(1,0)},
+            {Keys.S, new IntPoint(0,1)},
+            {Keys.A, new IntPoint(-1,0)},
+            {Keys.W, new IntPoint(0,-1)}};
+        internal static List<IntPoint> directions = new List<IntPoint>() {
+            new IntPoint(1,0),
+            new IntPoint(0,1),
+            new IntPoint(-1,0),
+            new IntPoint(0,-1)};
+        static bool isEditor = false;
         static int FPS = 0;
 
         #region Reinitable
@@ -59,14 +59,14 @@ namespace PackMine
         #endregion
         private void Init (bool tryLoad = true)
         {
-            Init_Debug();
-            if (tryLoad && !debug)
+            Init_Editor();
+            if (tryLoad && !isEditor)
             {
                 gameState = Loader.LoadOrCreate();
             }
             else
             {
-                if (!debug)
+                if (!isEditor)
                 {
                     gameState = new GameState(gameState.challengeState);
                 }
@@ -91,7 +91,7 @@ namespace PackMine
         {
             ShowOnTab();
             //Cursor.Hide();
-#if DEBUG
+#if EDITOR
             return;
 #endif
             //TopMost = true;
@@ -242,8 +242,8 @@ namespace PackMine
             // this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             // this.Bounds = Screen.PrimaryScreen.Bounds;
             var screenBounds = Screen.PrimaryScreen.Bounds;
-            var initialSize = new ZPoint(800, 600);
-            var position = (new ZPoint(screenBounds.Width, screenBounds.Height) - initialSize) / 2;
+            var initialSize = new IntPoint(800, 600);
+            var position = (new IntPoint(screenBounds.Width, screenBounds.Height) - initialSize) / 2;
             this.Bounds = new Rectangle(position.x, position.y, initialSize.x,initialSize.y);
         }
         internal void HideOnTab()
@@ -254,21 +254,21 @@ namespace PackMine
         {
             hidden = false;
         }
-        internal void Init_Debug()
+        internal void Init_Editor()
         {
-#if DEBUG
-            debug = true;
-            this.KeyDown += GameForm_KeyDown_Debug;
-            this.KeyUp += GameForm_KeyUp_Debug;
+#if EDITOR
+            isEditor = true;
+            this.KeyDown += GameForm_KeyDown_Editor;
+            this.KeyUp += GameForm_KeyUp_Editor;
         }
         Keys? magic = null;
-        private void GameForm_KeyDown_Debug(object sender, KeyEventArgs e)
+        private void GameForm_KeyDown_Editor(object sender, KeyEventArgs e)
         {
             var key = e.KeyCode;
             magic = key;
         }
 
-        private void GameForm_KeyUp_Debug(object sender, KeyEventArgs e)
+        private void GameForm_KeyUp_Editor(object sender, KeyEventArgs e)
         {
             magic = null;
 #endif
@@ -295,13 +295,13 @@ namespace PackMine
             RemoveFlag
         };
 
-        internal ZPoint CursorOnMap()
+        internal IntPoint CursorOnMap()
         {
             var clickPosition = this.pictureBox1.PointToClient(Cursor.Position);
             var screenSize = this.pictureBox1.Size;
             var positionFromCenter = new RPoint(clickPosition.X - screenSize.Width / 2, clickPosition.Y - screenSize.Height / 2);
             var mapPosition = (cameraPosition + positionFromCenter / zoom)/tileSize;
-            var cellPosition = new ZPoint((int)Math.Floor(mapPosition.x), (int)Math.Floor(mapPosition.y));
+            var cellPosition = new IntPoint((int)Math.Floor(mapPosition.x), (int)Math.Floor(mapPosition.y));
             return cellPosition;
         }
         internal RPoint CursorOnMenu()

@@ -5,19 +5,19 @@ using System.Text;
 
 namespace PackMine.Geometry
 {
-    public struct ZPoint
+    public struct IntPoint
     {
         public int x;
         public int y;
-        public ZPoint(int x, int y)
+        public IntPoint(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
-        public ZPoint(ZPoint z)
+        public IntPoint(IntPoint p)
         {
-            this.x = z.x;
-            this.y = z.y;
+            this.x = p.x;
+            this.y = p.y;
         }
         public double Length
         {
@@ -38,46 +38,46 @@ namespace PackMine.Geometry
             x = Math.Sign(x);
             y = Math.Sign(y);
         }
-        public static ZPoint Zero
+        public static IntPoint Zero
         {
             get
             {
-                return new ZPoint(0, 0);
+                return new IntPoint(0, 0);
             }
         }
-        public static ZPoint operator +(ZPoint A, ZPoint B)
+        public static IntPoint operator +(IntPoint A, IntPoint B)
         {
-            return new ZPoint(A.x + B.x, A.y + B.y);
+            return new IntPoint(A.x + B.x, A.y + B.y);
         }
-        public static ZPoint operator -(ZPoint A, ZPoint B)
+        public static IntPoint operator -(IntPoint A, IntPoint B)
         {
-            return new ZPoint(A.x - B.x, A.y - B.y);
+            return new IntPoint(A.x - B.x, A.y - B.y);
         }
-        public static ZPoint operator -(ZPoint A)
+        public static IntPoint operator -(IntPoint A)
         {
-            return new ZPoint(-A.x, -A.y);
+            return new IntPoint(-A.x, -A.y);
         }
-        public static double operator *(ZPoint A, ZPoint B)
+        public static double operator *(IntPoint A, IntPoint B)
         {
             return A.x * B.x + A.y * B.y;
         }
-        public static double operator ^(ZPoint A, ZPoint B)
+        public static double operator ^(IntPoint A, IntPoint B)
         {
             return A.x * B.y - B.x * A.y;
         }
-        public static ZPoint operator *(ZPoint A, int k)
+        public static IntPoint operator *(IntPoint A, int k)
         {
-            return new ZPoint(A.x * k, A.y * k);
+            return new IntPoint(A.x * k, A.y * k);
         }
-        public static ZPoint operator *(int k, ZPoint A)
+        public static IntPoint operator *(int k, IntPoint A)
         {
-            return new ZPoint(A.x * k, A.y * k);
+            return new IntPoint(A.x * k, A.y * k);
         }
-        public static ZPoint operator /(ZPoint A, int k)
+        public static IntPoint operator /(IntPoint A, int k)
         {
-            return new ZPoint(A.x / k, A.y / k);
+            return new IntPoint(A.x / k, A.y / k);
         }
-        public static bool operator ==(ZPoint A, ZPoint B)
+        public static bool operator ==(IntPoint A, IntPoint B)
         {
             if (System.Object.ReferenceEquals(A, B))
             {
@@ -91,7 +91,7 @@ namespace PackMine.Geometry
 
             return A.x == B.x && A.y == B.y;
         }
-        public static bool operator !=(ZPoint A, ZPoint B)
+        public static bool operator !=(IntPoint A, IntPoint B)
         {
             return !(A == B);
         }
@@ -101,7 +101,7 @@ namespace PackMine.Geometry
         }
         public override bool Equals(object obj)
         {
-            var p = (ZPoint)obj;
+            var p = (IntPoint)obj;
             if ((object)p == null)
                 return false;
 
