@@ -1,1 +1,1 @@
-[Download executable (Windows)] (PackMine.exe)
+[Download executable (Windows)](PackMine.exe)
