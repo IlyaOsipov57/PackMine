@@ -7,12 +7,21 @@ namespace PackMine.Geometry
 {
     public struct IntPoint
     {
-        public int x;
-        public int y;
-        public IntPoint(int x, int y)
+        public int X
         {
-            this.x = x;
-            this.y = y;
+            get;
+            private set;
+        }
+        public int Y
+        {
+            get;
+            private set;
+        }
+        public IntPoint(int x, int y)
+            : this()
+        {
+            this.X = x;
+            this.Y = y;
         }
         public double Length
         {
@@ -25,13 +34,13 @@ namespace PackMine.Geometry
         {
             get
             {
-                return x * x + y * y;
+                return X * X + Y * Y;
             }
         }
         public void PlanarNormalize()
         {
-            x = Math.Sign(x);
-            y = Math.Sign(y);
+            X = Math.Sign(X);
+            Y = Math.Sign(Y);
         }
         public static IntPoint Zero
         {
@@ -42,35 +51,35 @@ namespace PackMine.Geometry
         }
         public static IntPoint operator +(IntPoint A, IntPoint B)
         {
-            return new IntPoint(A.x + B.x, A.y + B.y);
+            return new IntPoint(A.X + B.X, A.Y + B.Y);
         }
         public static IntPoint operator -(IntPoint A, IntPoint B)
         {
-            return new IntPoint(A.x - B.x, A.y - B.y);
+            return new IntPoint(A.X - B.X, A.Y - B.Y);
         }
         public static IntPoint operator -(IntPoint A)
         {
-            return new IntPoint(-A.x, -A.y);
+            return new IntPoint(-A.X, -A.Y);
         }
         public static double operator *(IntPoint A, IntPoint B)
         {
-            return A.x * B.x + A.y * B.y;
+            return A.X * B.X + A.Y * B.Y;
         }
         public static double operator ^(IntPoint A, IntPoint B)
         {
-            return A.x * B.y - B.x * A.y;
+            return A.X * B.Y - B.X * A.Y;
         }
         public static IntPoint operator *(IntPoint A, int k)
         {
-            return new IntPoint(A.x * k, A.y * k);
+            return new IntPoint(A.X * k, A.Y * k);
         }
         public static IntPoint operator *(int k, IntPoint A)
         {
-            return new IntPoint(A.x * k, A.y * k);
+            return new IntPoint(A.X * k, A.Y * k);
         }
         public static IntPoint operator /(IntPoint A, int k)
         {
-            return new IntPoint(A.x / k, A.y / k);
+            return new IntPoint(A.X / k, A.Y / k);
         }
         public static bool operator ==(IntPoint A, IntPoint B)
         {
@@ -84,7 +93,7 @@ namespace PackMine.Geometry
                 return false;
             }
 
-            return A.x == B.x && A.y == B.y;
+            return A.X == B.X && A.Y == B.Y;
         }
         public static bool operator !=(IntPoint A, IntPoint B)
         {
@@ -92,7 +101,7 @@ namespace PackMine.Geometry
         }
         public override int GetHashCode()
         {
-            return x.GetHashCode() ^ (y.GetHashCode() << 16);
+            return (new Tuple<int, int>(X, Y)).GetHashCode();
         }
         public override bool Equals(object obj)
         {
@@ -100,11 +109,11 @@ namespace PackMine.Geometry
             if ((object)p == null)
                 return false;
 
-            return x == p.x && y == p.y;
+            return X == p.X && Y == p.Y;
         }
         public override string ToString()
         {
-            return String.Format("ZPoint: {0:f2}; {1:f2}", x, y);
+            return String.Format("IntPoint: {0:f2}; {1:f2}", X, Y);
         }
     }
 }

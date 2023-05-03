@@ -12,7 +12,7 @@ namespace PackMine.Utility
     {
         public static Room LoadRoom (IntPoint z)
         {
-            var data = roomdata[z.x][z.y];
+            var data = roomdata[z.X][z.Y];
             return ParseRoom(data);
         }
         private static byte[][][]roomdata
@@ -97,11 +97,11 @@ namespace PackMine.Utility
                     dataList.Add((byte)(gameState.solvedRooms.Contains(p) ? 1 : 0));
                 }
             }
-            dataList.Add((byte)(gameState.playerSavedPosition.x + PlayerCoordinatesOffset));
-            dataList.Add((byte)(gameState.playerSavedPosition.y + PlayerCoordinatesOffset));
+            dataList.Add((byte)(gameState.playerSavedPosition.X + PlayerCoordinatesOffset));
+            dataList.Add((byte)(gameState.playerSavedPosition.Y + PlayerCoordinatesOffset));
             dataList.Add((byte)(gameState.playerSavedDirection));
-            dataList.Add((byte)(gameState.playerLastStablePosition.x + PlayerCoordinatesOffset));
-            dataList.Add((byte)(gameState.playerLastStablePosition.y + PlayerCoordinatesOffset));
+            dataList.Add((byte)(gameState.playerLastStablePosition.X + PlayerCoordinatesOffset));
+            dataList.Add((byte)(gameState.playerLastStablePosition.Y + PlayerCoordinatesOffset));
             dataList.Add((byte)(gameState.playerDirection));
 
             dataList.Add((byte)(gameState.CornerstoneVisited ? 1 : 0));

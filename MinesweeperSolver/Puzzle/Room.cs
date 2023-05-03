@@ -20,12 +20,12 @@ namespace PackMine.Puzzle
         public static IntPoint FixRoomIndex(IntPoint room)
         {
             return new IntPoint(
-                Math.Min(3, Math.Max(0, room.x)),
-                Math.Min(3, Math.Max(0, room.y)));
+                Math.Min(3, Math.Max(0, room.X)),
+                Math.Min(3, Math.Max(0, room.Y)));
         }
         public static String GetName(IntPoint room)
         {
-            return Names[room.y][room.x];
+            return Names[room.Y][room.X];
         }
         public bool Clear(IntMap map, IntPoint position)
         {
@@ -39,7 +39,7 @@ namespace PackMine.Puzzle
                 var v = metaMap.Get(p);
                 if (v == -1 || v == 0)
                 {
-                    v = metaPattern[p.y][p.x];
+                    v = metaPattern[p.Y][p.X];
                 }
                 else
                     v = 0;

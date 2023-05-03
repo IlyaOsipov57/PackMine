@@ -8,18 +8,27 @@ namespace PackMine.Geometry
 {
     public struct RealPoint
     {
-        public double x;
-        public double y;
-        public RealPoint(double x, double y)
+        public double X
         {
-            this.x = x;
-            this.y = y;
+            get;
+            private set;
+        }
+        public double Y
+        {
+            get;
+            private set;
+        }
+        public RealPoint(double x, double y)
+            : this()
+        {
+            this.X = x;
+            this.Y = y;
         }
         public double Length
         {
             get
             {
-                return Math.Sqrt(x * x + y * y);
+                return Math.Sqrt(X * X + Y * Y);
             }
         }
         public static RealPoint Zero
@@ -31,35 +40,35 @@ namespace PackMine.Geometry
         }
         public static RealPoint operator +(RealPoint A, RealPoint B)
         {
-            return new RealPoint(A.x + B.x, A.y + B.y);
+            return new RealPoint(A.X + B.X, A.Y + B.Y);
         }
         public static RealPoint operator -(RealPoint A, RealPoint B)
         {
-            return new RealPoint(A.x - B.x, A.y - B.y);
+            return new RealPoint(A.X - B.X, A.Y - B.Y);
         }
         public static RealPoint operator -(RealPoint A)
         {
-            return new RealPoint(-A.x, -A.y);
+            return new RealPoint(-A.X, -A.Y);
         }
         public static double operator *(RealPoint A, RealPoint B)
         {
-            return A.x * B.x + A.y * B.y;
+            return A.X * B.X + A.Y * B.Y;
         }
         public static double operator ^(RealPoint A, RealPoint B)
         {
-            return A.x * B.y - B.x * A.y;
+            return A.X * B.Y - B.X * A.Y;
         }
         public static RealPoint operator *(RealPoint A, double k)
         {
-            return new RealPoint(A.x * k, A.y * k);
+            return new RealPoint(A.X * k, A.Y * k);
         }
         public static RealPoint operator *(double k, RealPoint A)
         {
-            return new RealPoint(A.x * k, A.y * k);
+            return new RealPoint(A.X * k, A.Y * k);
         }
         public static RealPoint operator /(RealPoint A, double k)
         {
-            return new RealPoint(A.x / k, A.y / k);
+            return new RealPoint(A.X / k, A.Y / k);
         }
         public static bool operator ==(RealPoint A, RealPoint B)
         {
@@ -73,7 +82,7 @@ namespace PackMine.Geometry
                 return false;
             }
 
-            return A.x == B.x && A.y == B.y;
+            return A.X == B.X && A.Y == B.Y;
         }
         public static bool operator !=(RealPoint A, RealPoint B)
         {
@@ -81,11 +90,11 @@ namespace PackMine.Geometry
         }
         public static explicit operator PointF(RealPoint A)
         {
-            return new PointF((float)A.x, (float)A.y);
+            return new PointF((float)A.X, (float)A.Y);
         }
         public static explicit operator SizeF(RealPoint A)
         {
-            return new SizeF((float)A.x, (float)A.y);
+            return new SizeF((float)A.X, (float)A.Y);
         }
         public static explicit operator RealPoint(Point A)
         {
@@ -97,7 +106,7 @@ namespace PackMine.Geometry
         }
         public static explicit operator RealPoint(IntPoint A)
         {
-            return new RealPoint(A.x, A.y);
+            return new RealPoint(A.X, A.Y);
         }
         public static explicit operator RealPoint(Size A)
         {
@@ -105,7 +114,7 @@ namespace PackMine.Geometry
         }
         public override int GetHashCode()
         {
-            return x.GetHashCode() ^ (y.GetHashCode() << 16);
+            return X.GetHashCode() ^ (Y.GetHashCode() << 16);
         }
         public override bool Equals(object obj)
         {
@@ -113,11 +122,11 @@ namespace PackMine.Geometry
             if ((object)p == null)
                 return false;
 
-            return x == p.x && y == p.y;
+            return X == p.X && Y == p.Y;
         }
         public override string ToString()
         {
-            return String.Format("RPoint: {0:f2}; {1:f2}", x, y);
+            return String.Format("RPoint: {0:f2}; {1:f2}", X, Y);
         }
     }
 }

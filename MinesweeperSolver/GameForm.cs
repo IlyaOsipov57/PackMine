@@ -244,7 +244,7 @@ namespace PackMine
             var screenBounds = Screen.PrimaryScreen.Bounds;
             var initialSize = new IntPoint(800, 600);
             var position = (new IntPoint(screenBounds.Width, screenBounds.Height) - initialSize) / 2;
-            this.Bounds = new Rectangle(position.x, position.y, initialSize.x,initialSize.y);
+            this.Bounds = new Rectangle(position.X, position.Y, initialSize.X,initialSize.Y);
         }
         internal void HideOnTab()
         {
@@ -277,11 +277,11 @@ namespace PackMine
         private int GetMenuIndex(RealPoint position)
         {
             var p = position - MenuItemPositionsStart;
-            if (p.x < -2 || 9 < p.x)
+            if (p.X < -2 || 9 < p.X)
                 return -1;
             for (int i = 0; i < 3; i++)
             {
-                if (-1 < p.y && p.y < 2)
+                if (-1 < p.Y && p.Y < 2)
                     return i;
                 p -= MenuItemPositionsStep;
             }
@@ -301,7 +301,7 @@ namespace PackMine
             var screenSize = this.pictureBox1.Size;
             var positionFromCenter = new RealPoint(clickPosition.X - screenSize.Width / 2, clickPosition.Y - screenSize.Height / 2);
             var mapPosition = (cameraPosition + positionFromCenter / zoom)/tileSize;
-            var cellPosition = new IntPoint((int)Math.Floor(mapPosition.x), (int)Math.Floor(mapPosition.y));
+            var cellPosition = new IntPoint((int)Math.Floor(mapPosition.X), (int)Math.Floor(mapPosition.Y));
             return cellPosition;
         }
         internal RealPoint CursorOnMenu()

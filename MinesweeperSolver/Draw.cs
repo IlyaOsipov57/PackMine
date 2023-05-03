@@ -61,7 +61,7 @@ namespace PackMine
             g.Clear(Color.AliceBlue);
             RealPoint wantedSize;
             RealPoint wantedPosition = GetTarget(out wantedSize);
-            var wantedZoom = Math.Min(image.Size.Width / wantedSize.x, image.Size.Height / wantedSize.y);
+            var wantedZoom = Math.Min(image.Size.Width / wantedSize.X, image.Size.Height / wantedSize.Y);
 
             fruitAnimation += deltaTime * fruitAnimationSpeed;
             if (fruitAnimation > 1)
@@ -544,8 +544,9 @@ namespace PackMine
                     var explosion = Math.Pow(2, finalCountdown * finalCountdown) / Math.Pow(2,25);
                     position *=explosion;
 
-                    position.x += R.NextDouble() * finalCountdown * explosion * (position.x > 0 ? 1 : -1);
-                    position.y += R.NextDouble() * finalCountdown * explosion * (position.y > 0 ? 1 : -1);
+                    position += new RealPoint(
+                        R.NextDouble() * finalCountdown * explosion * (position.X > 0 ? 1 : -1),
+                        R.NextDouble() * finalCountdown * explosion * (position.Y > 0 ? 1 : -1));
                     
                     if (finalCountdown > 6)
                         return;
@@ -568,16 +569,16 @@ namespace PackMine
 
 
             var positionF = (PointF)position;
-            if (coordinates.x % 6 == 0 && coordinates.y % 6 == 0)
+            if (coordinates.X % 6 == 0 && coordinates.Y % 6 == 0)
             {
                 g.FillRectangle(Brushes.Gray, positionF.X, positionF.Y, tileSize*5, tileSize*5);
             }
-            if (coordinates.x % 6 == 5)
+            if (coordinates.X % 6 == 5)
             {
                 var of = tileSize / 32;
                 g.FillRectangle(Brushes.Gray, positionF.X - of, positionF.Y, tileSize + 2 * of, tileSize);
             }
-            if(coordinates.y % 6 == 5)
+            if(coordinates.Y % 6 == 5)
             {
                 var of = tileSize / 32;
                 g.FillRectangle(Brushes.Gray, positionF.X, positionF.Y - of, tileSize, tileSize + 2 * of);
@@ -699,7 +700,7 @@ namespace PackMine
 
                     using (Font font = new System.Drawing.Font("Arial", 6))
                     {
-                        if (coordinates.y % 6 == 5)
+                        if (coordinates.Y % 6 == 5)
                         {
                             sf.FormatFlags = StringFormatFlags.DirectionVertical;
                             g.DrawString("§", font, Brushes.Black, centerF.X + 0.4f, centerF.Y, sf);

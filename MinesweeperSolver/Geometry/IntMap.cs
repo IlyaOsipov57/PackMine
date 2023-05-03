@@ -40,11 +40,11 @@ namespace PackMine.Geometry
         }
         public int Get(IntPoint p)
         {
-            return Get(p.x, p.y);
+            return Get(p.X, p.Y);
         }
         public int MagicGet(IntPoint p)
         {
-            return MagicGet(p.x, p.y);
+            return MagicGet(p.X, p.Y);
         }
         public int MagicGet(int x, int y)
         {
@@ -67,7 +67,7 @@ namespace PackMine.Geometry
         }
         public void Set(IntPoint p, int value)
         {
-            Set(p.x, p.y, value);
+            Set(p.X, p.Y, value);
         }
         public void Set(int x, int y, int value)
         {

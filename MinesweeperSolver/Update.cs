@@ -251,7 +251,7 @@ namespace PackMine
                         var t = playerTarget + playerMovement;
                         var v = gameState.map.Get(t);
 
-                        if(t.x == -1 && t.y == 16)
+                        if(t.X == -1 && t.Y == 16)
                         {
                             playerTarget += playerMovement;
                             acting = true;
@@ -259,12 +259,12 @@ namespace PackMine
                         }
                         else if (IsOOB())
                         {
-                            if (v == CellValue.Wall || (playerTarget.x == -1 && playerTarget.y == 16) || isEditor)
+                            if (v == CellValue.Wall || (playerTarget.X == -1 && playerTarget.Y == 16) || isEditor)
                             {
-                                if (t.x >= -1 &&
-                                    t.x <= 23 &&
-                                    t.y >= -1 &&
-                                    t.y <= 23)
+                                if (t.X >= -1 &&
+                                    t.X <= 23 &&
+                                    t.Y >= -1 &&
+                                    t.Y <= 23)
                                 {
                                     playerTarget += playerMovement;
                                     acting = true;
@@ -318,41 +318,41 @@ namespace PackMine
         {
             if(isEditor) return true;
 
-            if (playerTarget.x % 6 == 5 || playerTarget.y % 6 == 5)
+            if (playerTarget.X % 6 == 5 || playerTarget.Y % 6 == 5)
             {
                 SavePlayer(playerTarget);
             }
             else
             {
                 var lastVisited = playerTarget - playerMovement;
-                if (lastVisited.x % 6 == 5 || lastVisited.y % 6 == 5)
+                if (lastVisited.X % 6 == 5 || lastVisited.Y % 6 == 5)
                 {
                     SetRespawnPosition(lastVisited);
                 }
             }
 
-            var px = playerTarget.x;
+            var px = playerTarget.X;
             if (px % 6 == 5)
             {
-                px = (playerTarget + playerMovement).x;
+                px = (playerTarget + playerMovement).X;
             }
             if (px % 6 == 5)
             {
-                px = currentRoom.x;
+                px = currentRoom.X;
             }
             else
             {
                 px /= 6;
             }
 
-            var py = playerTarget.y;
+            var py = playerTarget.Y;
             if (py % 6 == 5)
             {
-                py = (playerTarget + playerMovement).y;
+                py = (playerTarget + playerMovement).Y;
             }
             if (py % 6 == 5)
             {
-                py = currentRoom.y;
+                py = currentRoom.Y;
             }
             else
             {
@@ -584,8 +584,8 @@ namespace PackMine
         {
 #if EDITOR
             speed = 5;
-            var p = new IntPoint((int)playerPosition.x, (int)playerPosition.y);
-            if (p.x % 6 != 5 && p.y % 6 != 5)
+            var p = new IntPoint((int)playerPosition.X, (int)playerPosition.Y);
+            if (p.X % 6 != 5 && p.Y % 6 != 5)
             {
                 currentRoom = p / 6;
             }
@@ -629,8 +629,8 @@ namespace PackMine
                         break;
                     case Keys.F6:
                         {
-                            int i = currentRoom.x;
-                            int j = currentRoom.y;
+                            int i = currentRoom.X;
+                            int j = currentRoom.Y;
                             {
                                 var m = new IntMap(5, 5, (ii, jj) => gameState.map.Get(i * 6 + ii, j * 6 + jj), CellValue.Wall);
                                 var r = new Room(m, new IntMap[0]);
