@@ -33,7 +33,7 @@ namespace PackMine.Puzzle
             {
                 return false;
             }
-            last = new IntPoint(position);
+            last = position;
             var p = position / 6;
             {
                 var v = metaMap.Get(p);

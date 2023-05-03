@@ -39,9 +39,9 @@ namespace PackMine
             map = new IntMap(23, 23, IntMap.Roomy, CellValue.Wall);
             solvedRooms = new HashSet<IntPoint>();
             roomsPrepared = false;
-            playerSavedPosition = new IntPoint(GameForm.startPosition);
+            playerSavedPosition = GameForm.startPosition;
             playerSavedDirection = 0;
-            playerLastStablePosition = new IntPoint(GameForm.startPosition);
+            playerLastStablePosition = GameForm.startPosition;
             playerDirection = 0;
             CornerstoneVisited = false;
         }

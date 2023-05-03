@@ -14,7 +14,7 @@ namespace PackMine
     public partial class GameForm : Form
     {
         internal static IntPoint startPosition = new IntPoint(2, 2);
-        internal static RPoint centerShift = new RPoint(0.5, 0.5);
+        internal static RealPoint centerShift = new RealPoint(0.5, 0.5);
         private static IntPoint endPosition = new IntPoint(20, 2);
         internal static double roomFadingSpeed = 2;
         internal static double speed = 2;
@@ -49,7 +49,7 @@ namespace PackMine
         int menuIndex;
         bool mouseMenuClick;
 
-        RPoint playerPosition;
+        RealPoint playerPosition;
         IntPoint playerTarget;
         IntPoint currentRoom;
         private void InitUpdate ()
@@ -76,8 +76,8 @@ namespace PackMine
             menuIndex = 0;
             mouseMenuClick = false;
 
-            playerPosition = (RPoint)gameState.playerLastStablePosition + centerShift;
-            playerTarget = new IntPoint(gameState.playerLastStablePosition);
+            playerPosition = (RealPoint)gameState.playerLastStablePosition + centerShift;
+            playerTarget = gameState.playerLastStablePosition;
             currentRoom = (gameState.playerLastStablePosition + directions[gameState.playerDirection]) / 6;
             currentRoom = Room.FixRoomIndex(currentRoom);
         }
@@ -201,8 +201,8 @@ namespace PackMine
                 if(roomFailed > 1 && !roomRepaired)
                 {
                     RepairRoom(currentRoom);
-                    playerTarget = new IntPoint(gameState.playerSavedPosition);
-                    playerPosition = (RPoint)(gameState.playerSavedPosition) + centerShift;
+                    playerTarget = gameState.playerSavedPosition;
+                    playerPosition = (RealPoint)(gameState.playerSavedPosition) + centerShift;
                     gameState.playerLastStablePosition = gameState.playerSavedPosition;
                     gameState.playerDirection = gameState.playerSavedDirection;
                     if ((playerTarget == new IntPoint(14, 11) && gameState.map.Get(14, 5) == CellValue.Door && gameState.map.Get(11, 14) == CellValue.Door) ||
@@ -290,8 +290,8 @@ namespace PackMine
             {
                 glassesOn = false;
                 var speedMultiplier = IsOOB() ? 3 : 1;
-                playerPosition += deltaTime * speed * speedMultiplier * (RPoint)playerMovement;
-                var dist = ((RPoint)playerTarget + centerShift - playerPosition) * (RPoint)playerMovement;
+                playerPosition += deltaTime * speed * speedMultiplier * (RealPoint)playerMovement;
+                var dist = ((RealPoint)playerTarget + centerShift - playerPosition) * (RealPoint)playerMovement;
                 if(canPrevent && ((dist <0.5 && !godModOn) || (dist < 2 && godModOn)))
                 {
                     if (EatCell())
@@ -300,7 +300,7 @@ namespace PackMine
                     }
                     else
                     {
-                        playerPosition = (RPoint)playerTarget + centerShift - (RPoint)playerMovement;
+                        playerPosition = (RealPoint)playerTarget + centerShift - (RealPoint)playerMovement;
                         playerTarget -= playerMovement;
                         acting = false;
                         canMove = false;
@@ -309,7 +309,7 @@ namespace PackMine
                 }
                 if(dist<0)
                 {
-                    playerPosition = (RPoint)playerTarget + centerShift;
+                    playerPosition = (RealPoint)playerTarget + centerShift;
                     acting = false;
                 }
             }
@@ -450,8 +450,8 @@ namespace PackMine
 
         private void SetRespawnPosition(IntPoint savePoint)
         {
-            gameState.playerSavedPosition = new IntPoint(savePoint);
-            gameState.playerLastStablePosition = new IntPoint(savePoint);
+            gameState.playerSavedPosition = savePoint;
+            gameState.playerLastStablePosition = savePoint;
             gameState.playerSavedDirection = gameState.playerDirection;
         }
         internal void FailRoom ()

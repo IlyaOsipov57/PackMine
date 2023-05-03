@@ -14,11 +14,6 @@ namespace PackMine.Geometry
             this.x = x;
             this.y = y;
         }
-        public IntPoint(IntPoint p)
-        {
-            this.x = p.x;
-            this.y = p.y;
-        }
         public double Length
         {
             get

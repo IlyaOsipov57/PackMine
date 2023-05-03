@@ -22,13 +22,13 @@ namespace PackMine
         internal static double fruitAnimationSpeed = 0.2;
         internal static double roomTitleFadingSpeed = 0.4;
         internal static double challengeSplashSpeed = 1.0;
-        internal static RPoint MenuItemPositionsStart = new RPoint(-10, 3.6);
-        internal static RPoint MenuItemPositionsStep = new RPoint(0,5);
+        internal static RealPoint MenuItemPositionsStart = new RealPoint(-10, 3.6);
+        internal static RealPoint MenuItemPositionsStep = new RealPoint(0,5);
 
 
         #region Reinitable
         double shakeFactor;
-        RPoint cameraPosition;
+        RealPoint cameraPosition;
         double zoom;
         double leftoverTime;
         double angle;
@@ -38,7 +38,7 @@ namespace PackMine
         private void InitDraw()
         {
             shakeFactor = 0;
-            cameraPosition = new RPoint(tileSize * 11.5, tileSize * 11.5);
+            cameraPosition = new RealPoint(tileSize * 11.5, tileSize * 11.5);
             zoom = 3.5;
             leftoverTime = -0.2;
             angle = 0;
@@ -59,8 +59,8 @@ namespace PackMine
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
 
             g.Clear(Color.AliceBlue);
-            RPoint wantedSize;
-            RPoint wantedPosition = GetTarget(out wantedSize);
+            RealPoint wantedSize;
+            RealPoint wantedPosition = GetTarget(out wantedSize);
             var wantedZoom = Math.Min(image.Size.Width / wantedSize.x, image.Size.Height / wantedSize.y);
 
             fruitAnimation += deltaTime * fruitAnimationSpeed;
@@ -148,11 +148,11 @@ namespace PackMine
             
             if(menuEscape)
             {
-                DrawDecoratedLine(g, "Continue", 16, new RPoint(tileSize * MenuItemPositionsStart), false);
-                DrawDecoratedLine(g, "New game", 16, new RPoint(tileSize * (MenuItemPositionsStart + MenuItemPositionsStep)), false);
-                DrawDecoratedLine(g, "Hints: " + (flagsOn ? "On" : "Off"), 16, new RPoint(tileSize * (MenuItemPositionsStart + MenuItemPositionsStep * 2)), false);
-                DrawDecoratedLine(g, "Exit", 16, new RPoint(tileSize * (MenuItemPositionsStart + MenuItemPositionsStep*3)), false);
-                DrawPlayer(g, MenuItemPositionsStart + new RPoint(-1,0.7) + MenuItemPositionsStep *menuIndex, 0, 1.2, true);
+                DrawDecoratedLine(g, "Continue", 16, tileSize * MenuItemPositionsStart, false);
+                DrawDecoratedLine(g, "New game", 16, tileSize * (MenuItemPositionsStart + MenuItemPositionsStep), false);
+                DrawDecoratedLine(g, "Hints: " + (flagsOn ? "On" : "Off"), 16, tileSize * (MenuItemPositionsStart + MenuItemPositionsStep * 2), false);
+                DrawDecoratedLine(g, "Exit", 16, tileSize * (MenuItemPositionsStart + MenuItemPositionsStep*3), false);
+                DrawPlayer(g, MenuItemPositionsStart + new RealPoint(-1,0.7) + MenuItemPositionsStep *menuIndex, 0, 1.2, true);
             }
 
 
@@ -193,7 +193,7 @@ namespace PackMine
 
             using (Font font = new System.Drawing.Font("Arial", 8))
             {
-                g.DrawString("Mekagem 2018", font, Brushes.Black, (PointF)(new RPoint(0, 0)), sf);
+                g.DrawString("Mekagem 2018", font, Brushes.Black, (PointF)(new RealPoint(0, 0)), sf);
             }
         }
 
@@ -205,7 +205,7 @@ namespace PackMine
 
             using (Font font = new System.Drawing.Font("Arial", 8))
             {
-                g.DrawString("FPS: " + FPS, font, Brushes.Black, (PointF)(new RPoint(0, 0)), sf);
+                g.DrawString("FPS: " + FPS, font, Brushes.Black, (PointF)(new RealPoint(0, 0)), sf);
             }
         }
 
@@ -225,7 +225,7 @@ namespace PackMine
                     pos = 0.5;
 
                 pos -= 0.5;
-                var position = tileSize * ((RPoint)currentRoom * 6 + new RPoint(2.5 + pos * 100, 4));
+                var position = tileSize * ((RealPoint)currentRoom * 6 + new RealPoint(2.5 + pos * 100, 4));
 
                 DrawDecoratedLine(g, roomName, k, position, true);
             }
@@ -247,9 +247,9 @@ namespace PackMine
                 challengeSplashFading < 5 ? 0 : challengeSplashFading - 5;
             c = c * c * c - 0.1 * c;
             c *= 40.0;
-            var position = tileSize * (new RPoint(0, c)) + cameraPosition;
+            var position = tileSize * (new RealPoint(0, c)) + cameraPosition;
             DrawBlueDecoratedLine(g, splashText, 16, position, true);
-            DrawBlueDecoratedLine(g, "Secret challenges completed:\r\n" + gameState.challengeState.Total + " out of 4", 10, position + new RPoint(0, 20), true);
+            DrawBlueDecoratedLine(g, "Secret challenges completed:\r\n" + gameState.challengeState.Total + " out of 4", 10, position + new RealPoint(0, 20), true);
         }
         private class Challenge
         {
@@ -293,7 +293,7 @@ namespace PackMine
                 {
                     var roomName = challenge.Title + ":\r\n\r\n\r\n\r\n\r\n\r\n" + (challenge.Done ? "DONE" : "NOT DONE");
                     var k = 6;
-                    var position = tileSize * ((RPoint)challenge.Room * 6 + new RPoint(2.5, 2.5));
+                    var position = tileSize * ((RealPoint)challenge.Room * 6 + new RealPoint(2.5, 2.5));
                     DrawFog(g, challenge.Room, challenge.Done ? Color.LimeGreen : Color.DarkGray, 0.9);
                     DrawBlackDecoratedLine(g, roomName, k, position, true);
                     DrawBlackDecoratedLine(g, challenge.Description, k, position, true);
@@ -301,7 +301,7 @@ namespace PackMine
             }
         }
 
-        private void DrawDecoratedLine(Graphics g, string text, int fontSize, RPoint position, bool centered)
+        private void DrawDecoratedLine(Graphics g, string text, int fontSize, RealPoint position, bool centered)
         {
             using (Font font = new System.Drawing.Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel))
             {
@@ -325,7 +325,7 @@ namespace PackMine
                 }
             }
         }
-        private void DrawBlueDecoratedLine(Graphics g, string text, int fontSize, RPoint position, bool centered)
+        private void DrawBlueDecoratedLine(Graphics g, string text, int fontSize, RealPoint position, bool centered)
         {
             using (Font font = new System.Drawing.Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel))
             {
@@ -349,7 +349,7 @@ namespace PackMine
                 }
             }
         }
-        private void DrawBlackDecoratedLine(Graphics g, string text, int fontSize, RPoint position, bool centered)
+        private void DrawBlackDecoratedLine(Graphics g, string text, int fontSize, RealPoint position, bool centered)
         {
             using (Font font = new System.Drawing.Font("Arial", fontSize, FontStyle.Bold, GraphicsUnit.Pixel))
             {
@@ -374,27 +374,27 @@ namespace PackMine
             {
                 var of = - tileSize / 32;
                 var roomSize = tileSize * 5 - of*2;
-                var positionF = (PointF)(tileSize * 6 * (RPoint)room - cameraPosition + new RPoint(of,of));
+                var positionF = (PointF)(tileSize * 6 * (RealPoint)room - cameraPosition + new RealPoint(of,of));
                 g.FillRectangle(b, positionF.X, positionF.Y,roomSize,roomSize);
             }
         }
-        internal void DrawPlayer(Graphics g, RPoint coordinates, int direction, double sizeMultiplier, bool inMenu = false)
+        internal void DrawPlayer(Graphics g, RealPoint coordinates, int direction, double sizeMultiplier, bool inMenu = false)
         {
             using (var p = new Pen(Color.Black))
             {
                 p.Width = (float)(0.5 * sizeMultiplier);
                 p.LineJoin = LineJoin.Round;
-                var position = tileSize * (RPoint)coordinates - cameraPosition;
+                var position = tileSize * (RealPoint)coordinates - cameraPosition;
                 var size = sizeMultiplier * tileSize;
-                var positionF = (PointF)(position - size * new RPoint(0.5, 0.5));
+                var positionF = (PointF)(position - size * new RealPoint(0.5, 0.5));
                 var halfPeriod = 0.1;
                 if (glassesOn && !acting && !inMenu)
                 {
                     g.FillEllipse(Brushes.Orange, positionF.X, positionF.Y, (float)size, (float)size);
                     g.DrawEllipse(p, positionF.X, positionF.Y, (float)size, (float)size);
 
-                    var leftF =  (PointF)(position - size * new RPoint(0.35, 0.15));
-                    var rightF =  (PointF)(position - size * new RPoint(-0.05, 0.15));
+                    var leftF =  (PointF)(position - size * new RealPoint(0.35, 0.15));
+                    var rightF =  (PointF)(position - size * new RealPoint(-0.05, 0.15));
                     var fr = (float) size*0.3f;
                     g.FillEllipse(Brushes.Black,leftF.X,leftF.Y,fr,fr*0.75f);
                     g.FillEllipse(Brushes.Black, rightF.X, rightF.Y, fr, fr * 0.75f);
@@ -403,7 +403,7 @@ namespace PackMine
                     g.FillRectangle(Brushes.Black, rightF.X, rightF.Y - fr * 0.025f, fr, fr * 0.4f);
                     p.Width = fr/4;
 
-                    var giantF = (PointF)(position - size*new RPoint(2,0.12));
+                    var giantF = (PointF)(position - size*new RealPoint(2,0.12));
                     g.DrawArc(p, giantF.X, giantF.Y, (float)size * 4, (float)size * 4, 255, 30);
 
                     p.Width = fr / 8;
@@ -434,86 +434,86 @@ namespace PackMine
         internal void DrawWalls (Graphics g)
         {
             var fr = 0.125 / tileSize;
-            var lt = new RPoint(-fr, -fr);
-            var rt = new RPoint(fr, -fr);
-            var lb = new RPoint(-fr, fr);
-            var rb = new RPoint(fr, fr);
+            var lt = new RealPoint(-fr, -fr);
+            var rt = new RealPoint(fr, -fr);
+            var lb = new RealPoint(-fr, fr);
+            var rb = new RealPoint(fr, fr);
 
-            var outerBorder = new RPoint[]{
-                new RPoint(0,16) + lb,
-                new RPoint(0,12) + lt,
-                new RPoint(2,12) + lt,
-                new RPoint(2,11) + lb,
-                new RPoint(0,11) + lb,
-                new RPoint(0,6) + lt,
-                new RPoint(2,6) + lt,
-                new RPoint(2,5) + lb,
-                new RPoint(0,5) + lb,
-                new RPoint(0,0) + lt,
-                new RPoint(5,0) + rt,
-                new RPoint(5,2) + rt,
-                new RPoint(6,2) + lt,
-                new RPoint(6,0) + lt,
-                new RPoint(11,0) + rt,
-                new RPoint(11,2) + rt,
-                new RPoint(12,2) + lt,
-                new RPoint(12,0) + lt,
-                new RPoint(17,0) + rt,
-                new RPoint(17,2) + rt,
-                new RPoint(18,2) + lt,
-                new RPoint(18,0) + lt,
-                new RPoint(23,0) + rt,
-                new RPoint(23,5) + rb,
-                new RPoint(21,5) + rb,
-                new RPoint(21,6) + rt,
-                new RPoint(23,6) + rt,
-                new RPoint(23,11) + rb,
-                new RPoint(21,11) + rb,
-                new RPoint(21,12) + rt,
-                new RPoint(23,12) + rt,
-                new RPoint(23,17) + rb,
-                new RPoint(21,17) + rb,
-                new RPoint(21,18) + rt,
-                new RPoint(23,18) + rt,
-                new RPoint(23,23) + rb,
-                new RPoint(18,23) + lb,
-                new RPoint(18,21) + lb,
-                new RPoint(17,21) + rb,
-                new RPoint(17,23) + rb,
-                new RPoint(12,23) + lb,
-                new RPoint(12,21) + lb,
-                new RPoint(11,21) + rb,
-                new RPoint(11,23) + rb,
-                new RPoint(6,23) + lb,
-                new RPoint(6,21) + lb,
-                new RPoint(5,21) + rb,
-                new RPoint(5,23) + rb,
-                new RPoint(0,23) + lb,
-                new RPoint(0,18) + lt,
-                new RPoint(2,18) + lt,
-                new RPoint(2,17) + lb,
-                new RPoint(0,17) + lb,
-                new RPoint(0,17) + lt,
+            var outerBorder = new RealPoint[]{
+                new RealPoint(0,16) + lb,
+                new RealPoint(0,12) + lt,
+                new RealPoint(2,12) + lt,
+                new RealPoint(2,11) + lb,
+                new RealPoint(0,11) + lb,
+                new RealPoint(0,6) + lt,
+                new RealPoint(2,6) + lt,
+                new RealPoint(2,5) + lb,
+                new RealPoint(0,5) + lb,
+                new RealPoint(0,0) + lt,
+                new RealPoint(5,0) + rt,
+                new RealPoint(5,2) + rt,
+                new RealPoint(6,2) + lt,
+                new RealPoint(6,0) + lt,
+                new RealPoint(11,0) + rt,
+                new RealPoint(11,2) + rt,
+                new RealPoint(12,2) + lt,
+                new RealPoint(12,0) + lt,
+                new RealPoint(17,0) + rt,
+                new RealPoint(17,2) + rt,
+                new RealPoint(18,2) + lt,
+                new RealPoint(18,0) + lt,
+                new RealPoint(23,0) + rt,
+                new RealPoint(23,5) + rb,
+                new RealPoint(21,5) + rb,
+                new RealPoint(21,6) + rt,
+                new RealPoint(23,6) + rt,
+                new RealPoint(23,11) + rb,
+                new RealPoint(21,11) + rb,
+                new RealPoint(21,12) + rt,
+                new RealPoint(23,12) + rt,
+                new RealPoint(23,17) + rb,
+                new RealPoint(21,17) + rb,
+                new RealPoint(21,18) + rt,
+                new RealPoint(23,18) + rt,
+                new RealPoint(23,23) + rb,
+                new RealPoint(18,23) + lb,
+                new RealPoint(18,21) + lb,
+                new RealPoint(17,21) + rb,
+                new RealPoint(17,23) + rb,
+                new RealPoint(12,23) + lb,
+                new RealPoint(12,21) + lb,
+                new RealPoint(11,21) + rb,
+                new RealPoint(11,23) + rb,
+                new RealPoint(6,23) + lb,
+                new RealPoint(6,21) + lb,
+                new RealPoint(5,21) + rb,
+                new RealPoint(5,23) + rb,
+                new RealPoint(0,23) + lb,
+                new RealPoint(0,18) + lt,
+                new RealPoint(2,18) + lt,
+                new RealPoint(2,17) + lb,
+                new RealPoint(0,17) + lb,
+                new RealPoint(0,17) + lt,
             };
-            var innerBorder = new RPoint[]{
-                new RPoint(5,5) + rb,
-                new RPoint(5,3) + rb,
-                new RPoint(6,3) + lb,
-                new RPoint(6,5) + lb,
-                new RPoint(8,5) + lb,
-                new RPoint(8,6) + lt,
-                new RPoint(6,6) + lt,
-                new RPoint(6,8) + lt,
-                new RPoint(5,8) + rt,
-                new RPoint(5,6) + rt,
-                new RPoint(3,6) + rt,
-                new RPoint(3,5) + rb,
+            var innerBorder = new RealPoint[]{
+                new RealPoint(5,5) + rb,
+                new RealPoint(5,3) + rb,
+                new RealPoint(6,3) + lb,
+                new RealPoint(6,5) + lb,
+                new RealPoint(8,5) + lb,
+                new RealPoint(8,6) + lt,
+                new RealPoint(6,6) + lt,
+                new RealPoint(6,8) + lt,
+                new RealPoint(5,8) + rt,
+                new RealPoint(5,6) + rt,
+                new RealPoint(3,6) + rt,
+                new RealPoint(3,5) + rb,
             };
-            var outerOuterBorder =  new RPoint[]{
-                new RPoint(-1,-1) + rb,
-                new RPoint(24,-1) + lb,
-                new RPoint(24,24) + lt,
-                new RPoint(-1,24) + rt,
+            var outerOuterBorder =  new RealPoint[]{
+                new RealPoint(-1,-1) + rb,
+                new RealPoint(24,-1) + lb,
+                new RealPoint(24,24) + lt,
+                new RealPoint(-1,24) + rt,
             };
 
             g.DrawPolygon(Pens.LightGray, outerOuterBorder.Select(p => (PointF)(p * tileSize - cameraPosition)).ToArray());
@@ -525,7 +525,7 @@ namespace PackMine
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    var s = new RPoint(6 * i, 6 * j);
+                    var s = new RealPoint(6 * i, 6 * j);
                     g.DrawPolygon(Pens.Black, innerBorder.Select(p => (PointF)((p + s) * tileSize - cameraPosition)).ToArray());
                 }
             }
@@ -534,11 +534,11 @@ namespace PackMine
         {
             var value = gameState.map.Get(coordinates);
 
-            var position = tileSize * (RPoint)coordinates - cameraPosition;
+            var position = tileSize * (RealPoint)coordinates - cameraPosition;
 
             if(finalCountdown > 2)
             {
-                position += new RPoint(R.NextDouble() * finalCountdown, R.NextDouble() * finalCountdown);
+                position += new RealPoint(R.NextDouble() * finalCountdown, R.NextDouble() * finalCountdown);
                 if(finalCountdown > 5)
                 {
                     var explosion = Math.Pow(2, finalCountdown * finalCountdown) / Math.Pow(2,25);
@@ -552,13 +552,13 @@ namespace PackMine
                 }
             }
 
-            var center = position + new RPoint(tileSize / 2, tileSize / 2);
+            var center = position + new RealPoint(tileSize / 2, tileSize / 2);
 
 
             var topLeft = (PointF)(position);
-            var topRight = (PointF)(position + new RPoint(tileSize, 0));
-            var bottomLeft = (PointF)(position + new RPoint(0, tileSize));
-            var bottomRight = (PointF)(position + new RPoint(tileSize, tileSize));
+            var topRight = (PointF)(position + new RealPoint(tileSize, 0));
+            var bottomLeft = (PointF)(position + new RealPoint(0, tileSize));
+            var bottomRight = (PointF)(position + new RealPoint(tileSize, tileSize));
 
 
             if (value == CellValue.Wall)
@@ -583,7 +583,7 @@ namespace PackMine
                 g.FillRectangle(Brushes.Gray, positionF.X, positionF.Y - of, tileSize, tileSize + 2 * of);
             }
 
-            positionF = (PointF)(position + new RPoint(tileSize / 32, tileSize / 32));
+            positionF = (PointF)(position + new RealPoint(tileSize / 32, tileSize / 32));
             if (value == CellValue.Door)
             {
                 using (var b = new SolidBrush(mixedBrown))
@@ -616,9 +616,9 @@ namespace PackMine
                 var fr1 = tileSize * 0.75f;
                 var fr2 = tileSize;
                 var fr3 = tileSize *0.875f;
-                var c1F = (PointF)(center - new RPoint(fr1,fr1));
-                var c2F = (PointF)(center - new RPoint(fr2,fr2));
-                var c3F = (PointF)(center - new RPoint(fr3,fr3));
+                var c1F = (PointF)(center - new RealPoint(fr1,fr1));
+                var c2F = (PointF)(center - new RealPoint(fr2,fr2));
+                var c3F = (PointF)(center - new RealPoint(fr3,fr3));
                 var rot = (float)fruitAnimation;
                 g.DrawArc(p1, c1F.X, c1F.Y, fr1 * 2, fr1 * 2, rot * 360, 40);
                 g.DrawArc(p1, c2F.X, c2F.Y, fr2 * 2, fr2 * 2, 120 + rot * 360, 40);
@@ -637,17 +637,17 @@ namespace PackMine
 
                     var fr = 5 * tileSize / 16;
 
-                    var c1F = (PointF)(center - new RPoint(fr/2, fr));
+                    var c1F = (PointF)(center - new RealPoint(fr/2, fr));
                     g.DrawArc(p, c1F.X, c1F.Y, fr * 3, fr * 3, 180, 80);
 
-                    var c2F = (PointF)(center - new RPoint(-fr / 2, 3*fr/2));
+                    var c2F = (PointF)(center - new RealPoint(-fr / 2, 3*fr/2));
                     g.DrawArc(p, c2F.X, c2F.Y, fr * 2.5f, fr * 2.5f, 160, 57);
 
                     fr = 5f * tileSize / 16;
-                    var posF = (PointF)(center - new RPoint(fr, fr/8));
+                    var posF = (PointF)(center - new RealPoint(fr, fr/8));
                     g.FillEllipse(Brushes.Red, posF.X, posF.Y, fr, fr);
                     g.DrawEllipse(p, posF.X, posF.Y, fr, fr);
-                    posF = (PointF)(center - new RPoint(0, 0));
+                    posF = (PointF)(center - new RealPoint(0, 0));
                     g.FillEllipse(Brushes.Red, posF.X, posF.Y, fr, fr);
                     g.DrawEllipse(p, posF.X, posF.Y, fr, fr);
                 }
@@ -659,14 +659,14 @@ namespace PackMine
             {
                 var innerSize1 = tileSize / 32;
                 var innerSize2 = tileSize / 8;
-                var topLeft1 = (PointF)(position + new RPoint(innerSize1, innerSize1));
-                var topRight1 = (PointF)(position + new RPoint(tileSize - innerSize1, innerSize1));
-                var bottomLeft1 = (PointF)(position + new RPoint(innerSize1, tileSize - innerSize1));
-                var bottomRight1 = (PointF)(position + new RPoint(tileSize - innerSize1, tileSize - innerSize1));
-                var topLeft2 = (PointF)(position + new RPoint(innerSize2, innerSize2));
-                var topRight2 = (PointF)(position + new RPoint(tileSize - innerSize2, innerSize2));
-                var bottomLeft2 = (PointF)(position + new RPoint(innerSize2, tileSize - innerSize2));
-                var bottomRight2 = (PointF)(position + new RPoint(tileSize - innerSize2, tileSize - innerSize2));
+                var topLeft1 = (PointF)(position + new RealPoint(innerSize1, innerSize1));
+                var topRight1 = (PointF)(position + new RealPoint(tileSize - innerSize1, innerSize1));
+                var bottomLeft1 = (PointF)(position + new RealPoint(innerSize1, tileSize - innerSize1));
+                var bottomRight1 = (PointF)(position + new RealPoint(tileSize - innerSize1, tileSize - innerSize1));
+                var topLeft2 = (PointF)(position + new RealPoint(innerSize2, innerSize2));
+                var topRight2 = (PointF)(position + new RealPoint(tileSize - innerSize2, innerSize2));
+                var bottomLeft2 = (PointF)(position + new RealPoint(innerSize2, tileSize - innerSize2));
+                var bottomRight2 = (PointF)(position + new RealPoint(tileSize - innerSize2, tileSize - innerSize2));
 
                 if (value != CellValue.Door)
                 {
@@ -674,13 +674,13 @@ namespace PackMine
                     g.FillPolygon(Brushes.Gray, new PointF[] { bottomLeft1, bottomRight1, topRight1, topRight2, bottomRight2, bottomLeft2 });
                     if (value == CellValue.Flag && flagsOn)
                     {
-                        var flagLeft = (PointF)(position + new RPoint(tileSize * 0.25, tileSize * 0.375));
-                        var flagTop = (PointF)(position + new RPoint(tileSize * 0.625, tileSize * 0.25));
-                        var flagBot = (PointF)(position + new RPoint(tileSize * 0.625, tileSize * 0.5));
-                        var poleTopLeft = (PointF)(position + new RPoint(tileSize * 18f / 32, tileSize * 0.375));
-                        var poleTopRight = (PointF)(position + new RPoint(tileSize * 20f / 32, tileSize * 0.25));
-                        var poleBottomLeft = (PointF)(position + new RPoint(tileSize * 18f / 32, tileSize * 0.75));
-                        var poleBottomRight = (PointF)(position + new RPoint(tileSize * 20f / 32, tileSize * 0.75));
+                        var flagLeft = (PointF)(position + new RealPoint(tileSize * 0.25, tileSize * 0.375));
+                        var flagTop = (PointF)(position + new RealPoint(tileSize * 0.625, tileSize * 0.25));
+                        var flagBot = (PointF)(position + new RealPoint(tileSize * 0.625, tileSize * 0.5));
+                        var poleTopLeft = (PointF)(position + new RealPoint(tileSize * 18f / 32, tileSize * 0.375));
+                        var poleTopRight = (PointF)(position + new RealPoint(tileSize * 20f / 32, tileSize * 0.25));
+                        var poleBottomLeft = (PointF)(position + new RealPoint(tileSize * 18f / 32, tileSize * 0.75));
+                        var poleBottomRight = (PointF)(position + new RealPoint(tileSize * 20f / 32, tileSize * 0.75));
 
 
                         g.FillPolygon(Brushes.Black, new PointF[] { poleTopLeft, poleTopRight, poleBottomRight, poleBottomLeft});
@@ -727,39 +727,39 @@ namespace PackMine
             if (value == CellValue.Mine)
             {
                 var fr = 4.5f * tileSize/16;
-                var posF = (PointF)(center - new RPoint(fr,fr));
+                var posF = (PointF)(center - new RealPoint(fr,fr));
                 g.FillEllipse(Brushes.Black, posF.X, posF.Y, fr * 2, fr * 2);
                 fr = 6f * tileSize/16;
-                var topF = (PointF)(center + new RPoint(0, -fr));
-                var bottomF = (PointF)(center + new RPoint(0, fr));
-                var leftF = (PointF)(center + new RPoint(-fr, 0));
-                var rightF = (PointF)(center + new RPoint(fr, 0));
+                var topF = (PointF)(center + new RealPoint(0, -fr));
+                var bottomF = (PointF)(center + new RealPoint(0, fr));
+                var leftF = (PointF)(center + new RealPoint(-fr, 0));
+                var rightF = (PointF)(center + new RealPoint(fr, 0));
                 fr = 4f * tileSize / 16;
-                var topleftF = (PointF)(center + new RPoint(-fr, -fr));
-                var bottomleftF = (PointF)(center + new RPoint(-fr, fr));
-                var bottomrightF = (PointF)(center + new RPoint(fr, fr));
-                var toprightF = (PointF)(center + new RPoint(fr, -fr));
+                var topleftF = (PointF)(center + new RealPoint(-fr, -fr));
+                var bottomleftF = (PointF)(center + new RealPoint(-fr, fr));
+                var bottomrightF = (PointF)(center + new RealPoint(fr, fr));
+                var toprightF = (PointF)(center + new RealPoint(fr, -fr));
                 g.DrawLine(Pens.Black, topF, bottomF);
                 g.DrawLine(Pens.Black, leftF, rightF);
                 g.DrawLine(Pens.Black, topleftF, bottomrightF);
                 g.DrawLine(Pens.Black, bottomleftF, toprightF);
                 fr = 2f * tileSize / 16;
-                var glareF =  (PointF)(center + new RPoint(-fr, -fr));
+                var glareF =  (PointF)(center + new RealPoint(-fr, -fr));
                 g.FillRectangle(Brushes.White, glareF.X, glareF.Y, fr, fr);
             }
         }
-        internal RPoint GetTarget (out RPoint size)
+        internal RealPoint GetTarget (out RealPoint size)
         {
             if(menuEscape)
             {
-                size = new RPoint(tileSize * 40, tileSize *30);
-                return tileSize * new RPoint(7.5, 11.5);
+                size = new RealPoint(tileSize * 40, tileSize *30);
+                return tileSize * new RealPoint(7.5, 11.5);
             }
             var s = tileSize*10 *Math.Min(3,(1+Math.Max(0,growth)));
-            size = new RPoint(s, s);
+            size = new RealPoint(s, s);
             if (godModOn && growth > 4)
-                return tileSize * new RPoint(11.5, 11.5);
-            return tileSize * (6 * (RPoint)currentRoom + new RPoint(2.5, 2.5));
+                return tileSize * new RealPoint(11.5, 11.5);
+            return tileSize * (6 * (RealPoint)currentRoom + new RealPoint(2.5, 2.5));
         }
         internal bool IsOOB ()
         {

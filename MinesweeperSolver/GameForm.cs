@@ -274,7 +274,7 @@ namespace PackMine
 #endif
         }
 
-        private int GetMenuIndex(RPoint position)
+        private int GetMenuIndex(RealPoint position)
         {
             var p = position - MenuItemPositionsStart;
             if (p.x < -2 || 9 < p.x)
@@ -299,16 +299,16 @@ namespace PackMine
         {
             var clickPosition = this.pictureBox1.PointToClient(Cursor.Position);
             var screenSize = this.pictureBox1.Size;
-            var positionFromCenter = new RPoint(clickPosition.X - screenSize.Width / 2, clickPosition.Y - screenSize.Height / 2);
+            var positionFromCenter = new RealPoint(clickPosition.X - screenSize.Width / 2, clickPosition.Y - screenSize.Height / 2);
             var mapPosition = (cameraPosition + positionFromCenter / zoom)/tileSize;
             var cellPosition = new IntPoint((int)Math.Floor(mapPosition.x), (int)Math.Floor(mapPosition.y));
             return cellPosition;
         }
-        internal RPoint CursorOnMenu()
+        internal RealPoint CursorOnMenu()
         {
             var clickPosition = this.pictureBox1.PointToClient(Cursor.Position);
             var screenSize = this.pictureBox1.Size;
-            var positionFromCenter = new RPoint(clickPosition.X - screenSize.Width / 2, clickPosition.Y - screenSize.Height / 2);
+            var positionFromCenter = new RealPoint(clickPosition.X - screenSize.Width / 2, clickPosition.Y - screenSize.Height / 2);
             var mapPosition = (cameraPosition + positionFromCenter / zoom) / tileSize;
             return mapPosition;
         }

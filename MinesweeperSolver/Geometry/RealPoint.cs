@@ -6,19 +6,14 @@ using System.Text;
 
 namespace PackMine.Geometry
 {
-    public struct RPoint
+    public struct RealPoint
     {
         public double x;
         public double y;
-        public RPoint(double x, double y)
+        public RealPoint(double x, double y)
         {
             this.x = x;
             this.y = y;
-        }
-        public RPoint(RPoint z)
-        {
-            this.x = z.x;
-            this.y = z.y;
         }
         public double Length
         {
@@ -27,46 +22,46 @@ namespace PackMine.Geometry
                 return Math.Sqrt(x * x + y * y);
             }
         }
-        public static RPoint Zero
+        public static RealPoint Zero
         {
             get
             {
-                return new RPoint(0, 0);
+                return new RealPoint(0, 0);
             }
         }
-        public static RPoint operator +(RPoint A, RPoint B)
+        public static RealPoint operator +(RealPoint A, RealPoint B)
         {
-            return new RPoint(A.x + B.x, A.y + B.y);
+            return new RealPoint(A.x + B.x, A.y + B.y);
         }
-        public static RPoint operator -(RPoint A, RPoint B)
+        public static RealPoint operator -(RealPoint A, RealPoint B)
         {
-            return new RPoint(A.x - B.x, A.y - B.y);
+            return new RealPoint(A.x - B.x, A.y - B.y);
         }
-        public static RPoint operator -(RPoint A)
+        public static RealPoint operator -(RealPoint A)
         {
-            return new RPoint(-A.x, -A.y);
+            return new RealPoint(-A.x, -A.y);
         }
-        public static double operator *(RPoint A, RPoint B)
+        public static double operator *(RealPoint A, RealPoint B)
         {
             return A.x * B.x + A.y * B.y;
         }
-        public static double operator ^(RPoint A, RPoint B)
+        public static double operator ^(RealPoint A, RealPoint B)
         {
             return A.x * B.y - B.x * A.y;
         }
-        public static RPoint operator *(RPoint A, double k)
+        public static RealPoint operator *(RealPoint A, double k)
         {
-            return new RPoint(A.x * k, A.y * k);
+            return new RealPoint(A.x * k, A.y * k);
         }
-        public static RPoint operator *(double k, RPoint A)
+        public static RealPoint operator *(double k, RealPoint A)
         {
-            return new RPoint(A.x * k, A.y * k);
+            return new RealPoint(A.x * k, A.y * k);
         }
-        public static RPoint operator /(RPoint A, double k)
+        public static RealPoint operator /(RealPoint A, double k)
         {
-            return new RPoint(A.x / k, A.y / k);
+            return new RealPoint(A.x / k, A.y / k);
         }
-        public static bool operator ==(RPoint A, RPoint B)
+        public static bool operator ==(RealPoint A, RealPoint B)
         {
             if (System.Object.ReferenceEquals(A, B))
             {
@@ -80,33 +75,33 @@ namespace PackMine.Geometry
 
             return A.x == B.x && A.y == B.y;
         }
-        public static bool operator !=(RPoint A, RPoint B)
+        public static bool operator !=(RealPoint A, RealPoint B)
         {
             return !(A == B);
         }
-        public static explicit operator PointF(RPoint A)
+        public static explicit operator PointF(RealPoint A)
         {
             return new PointF((float)A.x, (float)A.y);
         }
-        public static explicit operator SizeF(RPoint A)
+        public static explicit operator SizeF(RealPoint A)
         {
             return new SizeF((float)A.x, (float)A.y);
         }
-        public static explicit operator RPoint(Point A)
+        public static explicit operator RealPoint(Point A)
         {
-            return new RPoint(A.X, A.Y);
+            return new RealPoint(A.X, A.Y);
         }
-        public static explicit operator RPoint(PointF A)
+        public static explicit operator RealPoint(PointF A)
         {
-            return new RPoint(A.X, A.Y);
+            return new RealPoint(A.X, A.Y);
         }
-        public static explicit operator RPoint(IntPoint A)
+        public static explicit operator RealPoint(IntPoint A)
         {
-            return new RPoint(A.x, A.y);
+            return new RealPoint(A.x, A.y);
         }
-        public static explicit operator RPoint(Size A)
+        public static explicit operator RealPoint(Size A)
         {
-            return new RPoint(A.Width, A.Height);
+            return new RealPoint(A.Width, A.Height);
         }
         public override int GetHashCode()
         {
@@ -114,7 +109,7 @@ namespace PackMine.Geometry
         }
         public override bool Equals(object obj)
         {
-            var p = (RPoint)obj;
+            var p = (RealPoint)obj;
             if ((object)p == null)
                 return false;
 
